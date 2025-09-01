@@ -1,8 +1,10 @@
 package header
 
 import (
-	"encoding/binary"
 	"fmt"
+
+	"github.com/tomanta/gDoom/wad"
+	"github.com/tomanta/gdoom/wad"
 )
 
 type Header struct {
@@ -16,7 +18,9 @@ func NewHeaderFromBytes(data []byte) (Header, error) {
 		return Header{}, fmt.Errorf("file too small: %d", len(data))
 	}
 	header := string(data[0:4])
-	numLumps := int32(binary.LittleEndian.Uint32(data[4:8]))
-	dirPos := int32(binary.LittleEndian.Uint32(data[8:12]))
+	numLumps, ok := wad.Int32FromBytes(data[4:8]); ok {
+		return Header{}, fmt.Errorf("could not read lump count: %v", ok)
+	}
+	dirPos, _ := wad.Int32FromBytes(data[8:12])
 	return Header{Header: header, NumLumps: numLumps, DirectoryPos: dirPos}, nil
 }
