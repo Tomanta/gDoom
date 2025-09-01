@@ -18,15 +18,15 @@ func NewDirEntryFromBytes(buf []byte) (DirEntry, error) {
 	}
 	offset, err := wad.Int32FromBytes(buf[0:4])
 	if err != nil {
-		return DirEntry{}, fmt.Errorf("error reading buffer: %v", err)
+		return DirEntry{}, fmt.Errorf("error reading buffer for lump offset: %v", err)
 	}
 	size, err := wad.Int32FromBytes(buf[4:8])
 	if err != nil {
-		return DirEntry{}, fmt.Errorf("error reading buffer: %v", err)
+		return DirEntry{}, fmt.Errorf("error reading buffer for lump size: %v", err)
 	}
 	name, err := wad.StringFromBytes(buf[8:16], 8)
 	if err != nil {
-		return DirEntry{}, fmt.Errorf("error reading buffer: %v", err)
+		return DirEntry{}, fmt.Errorf("error reading buffer for lump name: %v", err)
 	}
 	de := DirEntry{
 		Offset: offset,
