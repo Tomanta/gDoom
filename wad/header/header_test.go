@@ -1,23 +1,33 @@
-package wad
+package header
 
 import (
 	"testing"
 )
 
 func TestCanLoadHeader(t *testing.T) {
-	t.Run("Doom1 Shareware header loads correctly", func(t *testing.T) {
+	t.Run("error if buffer too small", func(t *testing.T) {
+		testHeader := []byte{
+			0x49, 0x57, 0x41, 0x44,
+			0xf0, 0x04, 0x00, 0x00,
+			0xb4, 0xb7, 0x4f}
+		_, err := NewHeaderFromBytes(testHeader)
+		if err == nil {
+			t.Fatalf("did not receive error")
+		}
+	})
+	t.Run("doom1 shareware header loads correctly", func(t *testing.T) {
 		testHeader := []byte{
 			0x49, 0x57, 0x41, 0x44, // "IWAD"
 			0xf0, 0x04, 0x00, 0x00, // number of lumps: 1264
 			0xb4, 0xb7, 0x4f, 0x00, // directory position: 5224372
 		}
-		got, err := NewWadFromBytes(testHeader)
+		got, err := NewHeaderFromBytes(testHeader)
 		if err != nil {
 			t.Fatalf("Could not read file: %v", err)
 		}
-		wantHeader := "IWAD"
-		if got.Header != wantHeader {
-			t.Errorf("wanted header %s, got %s", wantHeader, got.Header)
+		wantType := "IWAD"
+		if got.Header != wantType {
+			t.Errorf("wanted header %s, got %s", wantType, got.Header)
 		}
 
 		var wantNumLumps int32 = 1264
@@ -32,19 +42,19 @@ func TestCanLoadHeader(t *testing.T) {
 
 	})
 
-	t.Run("PWAD header loads correctly", func(t *testing.T) {
+	t.Run("pwad header loads correctly", func(t *testing.T) {
 		testHeader := []byte{
 			0x50, 0x57, 0x41, 0x44, // "PWAD"
 			0x02, 0x01, 0x00, 0x00, // number of lumps: 258
 			0x04, 0x27, 0x40, 0x00, // directory position: 4204292
 		}
-		got, err := NewWadFromBytes(testHeader)
+		got, err := NewHeaderFromBytes(testHeader)
 		if err != nil {
 			t.Fatalf("Could not read file: %v", err)
 		}
-		wantHeader := "PWAD"
-		if got.Header != wantHeader {
-			t.Errorf("wanted header %s, got %s", wantHeader, got.Header)
+		wantType := "PWAD"
+		if got.Header != wantType {
+			t.Errorf("wanted header %s, got %s", wantType, got.Header)
 		}
 		var wantNumLumps int32 = 258
 		if got.NumLumps != wantNumLumps {
