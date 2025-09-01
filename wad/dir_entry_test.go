@@ -2,7 +2,7 @@ package wad
 
 import "testing"
 
-func TestNewDirectoryEntryFromByte(t *testing.T) {
+func TestNewDirectoryEntryFromBytes(t *testing.T) {
 	t.Run("returns error if buffer wrong length", func(t *testing.T) {
 		dirEntry := []byte{
 			0x0c, 0x00, 0x00, 0x00, // offset: 12
