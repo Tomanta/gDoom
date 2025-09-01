@@ -26,8 +26,8 @@ func TestCanLoadHeader(t *testing.T) {
 			t.Fatalf("Could not read file: %v", err)
 		}
 		wantType := "IWAD"
-		if got.Header != wantType {
-			t.Errorf("wanted header %s, got %s", wantType, got.Header)
+		if got.WadType != wantType {
+			t.Errorf("wanted header %s, got %s", wantType, got.WadType)
 		}
 
 		var wantNumLumps int32 = 1264
@@ -53,8 +53,8 @@ func TestCanLoadHeader(t *testing.T) {
 			t.Fatalf("Could not read file: %v", err)
 		}
 		wantType := "PWAD"
-		if got.Header != wantType {
-			t.Errorf("wanted header %s, got %s", wantType, got.Header)
+		if got.WadType != wantType {
+			t.Errorf("wanted header %s, got %s", wantType, got.WadType)
 		}
 		var wantNumLumps int32 = 258
 		if got.NumLumps != wantNumLumps {
