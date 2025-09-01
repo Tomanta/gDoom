@@ -1,9 +1,7 @@
-package directory
+package wad
 
 import (
 	"fmt"
-
-	"github.com/tomanta/gdoom/wad"
 )
 
 type DirEntry struct {
@@ -12,19 +10,21 @@ type DirEntry struct {
 	Name   string
 }
 
+// NewDirEntryFromBytes takes a []byte buffer of 16 characters and returns a new DirEntry.
+// if the buffer is not exactly 16 bytes, returns an error.
 func NewDirEntryFromBytes(buf []byte) (DirEntry, error) {
 	if len(buf) != 16 {
 		return DirEntry{}, fmt.Errorf("invalid directory entry size; expected 16, received %d", len(buf))
 	}
-	offset, err := wad.Int32FromBytes(buf[0:4])
+	offset, err := Int32FromBytes(buf[0:4])
 	if err != nil {
 		return DirEntry{}, fmt.Errorf("error reading buffer for lump offset: %v", err)
 	}
-	size, err := wad.Int32FromBytes(buf[4:8])
+	size, err := Int32FromBytes(buf[4:8])
 	if err != nil {
 		return DirEntry{}, fmt.Errorf("error reading buffer for lump size: %v", err)
 	}
-	name, err := wad.StringFromBytes(buf[8:16], 8)
+	name, err := StringFromBytes(buf[8:16], 8)
 	if err != nil {
 		return DirEntry{}, fmt.Errorf("error reading buffer for lump name: %v", err)
 	}
