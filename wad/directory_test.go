@@ -1,7 +1,6 @@
 package wad
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 )
@@ -33,7 +32,7 @@ func TestNewDirectoryFromBytes(t *testing.T) {
 		gotDir, _ := NewDirectoryFromBytes(entryBuffer, 1)
 		got := gotDir.Entries[0]
 		if !reflect.DeepEqual(got, want) {
-			fmt.Errorf("wanted %v, got %v", want, got)
+			t.Errorf("wanted %v, got %v", want, got)
 		}
 	})
 	t.Run("can read multiple directory entries", func(t *testing.T) {
