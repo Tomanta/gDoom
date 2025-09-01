@@ -19,7 +19,7 @@ func TestCanLoadHeader(t *testing.T) {
 		testHeader := []byte{
 			0x49, 0x57, 0x41, 0x44, // "IWAD"
 			0xf0, 0x04, 0x00, 0x00, // number of lumps: 1264
-			0xb4, 0xb7, 0x4f, 0x00, // directory position: 5224372
+			0xb4, 0xb7, 0x3f, 0x00, // directory position: 4175796
 		}
 		got, err := NewHeaderFromBytes(testHeader)
 		if err != nil {
@@ -35,7 +35,7 @@ func TestCanLoadHeader(t *testing.T) {
 			t.Errorf("wanted number lumps %d, got %d", wantNumLumps, got.NumLumps)
 		}
 
-		var wantDirPos int32 = 5224372
+		var wantDirPos int32 = 4175796
 		if got.DirectoryPos != wantDirPos {
 			t.Errorf("wanted number lumps %d, got %d", wantDirPos, got.DirectoryPos)
 		}
