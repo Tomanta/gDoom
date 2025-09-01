@@ -8,7 +8,7 @@ Very early development. Currently can read the following from a byte buffer (a W
 
 - [x] header
 - [x] lump directory entry
-- [ ] full lump directory
+- [x] full lump directory
 - [ ] map
     - [ ] things
     - [ ] linedefs
