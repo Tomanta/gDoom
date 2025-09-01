@@ -10,6 +10,9 @@ type Header struct {
 	DirectoryPos int32
 }
 
+// NewHeaderFromBytes takes a 12-byte slice and returns a Header struct
+// If the slice is not at least 12 bytes or if it is unable to read
+// a piece of the data it will return an error.
 func NewHeaderFromBytes(data []byte) (Header, error) {
 	if len(data) < 12 {
 		return Header{}, fmt.Errorf("file too small: %d", len(data))

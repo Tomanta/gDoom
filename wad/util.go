@@ -5,6 +5,9 @@ import (
 	"fmt"
 )
 
+// Int32FromBytes takes a slice of 4 bytes in Little Endian encoding and return
+// an Int32. LittleEndian is the expected encoding for Doom source files.
+// If the provided slice is not exactly 4 bytes it will return an error.
 func Int32FromBytes(buf []byte) (int32, error) {
 	if len(buf) != 4 {
 		return 0, fmt.Errorf("expected 4 bytes, received %d", len(buf))
@@ -12,6 +15,10 @@ func Int32FromBytes(buf []byte) (int32, error) {
 	return int32(binary.LittleEndian.Uint32(buf)), nil
 }
 
+// StringFromBytes takes a slice of bytes and an expected max length, it will
+// return a string from that slice. It will stop parsing as soon as it hits
+// a null byte (0x00). If the input buffer is not the expected length it will
+// return an error.
 func StringFromBytes(buf []byte, length int) (string, error) {
 	if len(buf) != length {
 		return "", fmt.Errorf("expected buffer size %d, received %d", length, len(buf))
