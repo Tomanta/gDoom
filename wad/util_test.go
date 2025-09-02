@@ -4,6 +4,35 @@ import (
 	"testing"
 )
 
+func TestInt16FromBytes(t *testing.T) {
+	t.Run("generates error if buffer too short", func(t *testing.T) {
+		buf := []byte{0x3f}
+		_, err := Int16FromBytes(buf)
+		if err == nil {
+			t.Errorf("expected invalid buffer size error")
+		}
+	})
+	t.Run("generates error if buffer too long", func(t *testing.T) {
+		buf := []byte{0x3f, 0x42, 0x35}
+		_, err := Int16FromBytes(buf)
+		if err == nil {
+			t.Errorf("expected invalid buffer size error")
+		}
+	})
+
+	t.Run("returns correct int16", func(t *testing.T) {
+		buf := []byte{0xb4, 0xb7}
+		var want int16 = -18508
+		got, err := Int16FromBytes(buf)
+		if err != nil {
+			t.Fatalf("received unexpected error %v", err)
+		}
+		if got != want {
+			t.Errorf("wanted %d, got %d", want, got)
+		}
+	})
+}
+
 func TestInt32FromBytes(t *testing.T) {
 	t.Run("generates error if buffer too short", func(t *testing.T) {
 		buf := []byte{0x3f}

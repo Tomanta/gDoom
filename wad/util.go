@@ -5,6 +5,16 @@ import (
 	"fmt"
 )
 
+// Int16FromBytes takes a slice of 2 bytes in Little Endian encoding and return
+// an Int16. LittleEndian is the expected encoding for Doom source files.
+// If the provided slice is not exactly 4 bytes it will return an error.
+func Int16FromBytes(buf []byte) (int16, error) {
+	if len(buf) != 2 {
+		return 0, fmt.Errorf("expected 2 bytes, received %d", len(buf))
+	}
+	return int16(binary.LittleEndian.Uint16(buf)), nil
+}
+
 // Int32FromBytes takes a slice of 4 bytes in Little Endian encoding and return
 // an Int32. LittleEndian is the expected encoding for Doom source files.
 // If the provided slice is not exactly 4 bytes it will return an error.
