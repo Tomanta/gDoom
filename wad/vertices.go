@@ -1,6 +1,9 @@
 package wad
 
-import "fmt"
+import (
+	"encoding/binary"
+	"fmt"
+)
 
 type Vertex struct {
 	X int16
@@ -11,15 +14,13 @@ func NewVertexFromBytes(buf []byte) (Vertex, error) {
 	if len(buf) != 4 {
 		return Vertex{}, fmt.Errorf("buffer wrong length; expected 4 bytes, received %d", len(buf))
 	}
-	x, err := Int16FromBytes(buf[0:2])
+
+	var v Vertex
+	_, err := binary.Decode(buf, binary.LittleEndian, &v)
 	if err != nil {
-		return Vertex{}, fmt.Errorf("could not read vertex: %v", err)
+		return Vertex{}, fmt.Errorf("error decoding vertex: %v", err)
 	}
-	y, err := Int16FromBytes(buf[2:4])
-	if err != nil {
-		return Vertex{}, fmt.Errorf("could not read vertex: %v", err)
-	}
-	v := Vertex{X: x, Y: y}
+
 	return v, nil
 }
 

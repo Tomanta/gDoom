@@ -11,8 +11,6 @@ type Wad struct {
 	// Levels    []Level
 }
 
-var levelLumps = []string{"THINGS", "LINEDEFS", "SIDEDEFS", "VERTEXES", "SEGS", "SSECTORS", "NODES", "SECTORS", "REJECT", "BLOCKMAP"}
-
 func NewWadFromBytes(buf []byte) (Wad, error) {
 	// load header
 	header, err := NewHeaderFromBytes(buf[0:12])
@@ -36,33 +34,33 @@ func NewWadFromBytes(buf []byte) (Wad, error) {
 	}
 
 	levelList := []levelInfo{}
-	readingLevel := false
+	isReadingLevel := false
 	curLevelInfo := levelInfo{}
 
 	// now that we have that, we can start loading level data
 	for i, e := range dir.Entries {
-		if slices.Contains(levelLumps, e.Name) {
-			if !readingLevel {
+		if isLevelLump(e.Name) {
+			if !isReadingLevel {
 				return Wad{}, fmt.Errorf("error reading wad, lump %s outside level definition", e.Name)
 			}
 			continue
 		}
 
 		if isLevel(e.Name) {
-			if readingLevel {
+			if isReadingLevel {
 				curLevelInfo.endIndex = i
 				levelList = append(levelList, curLevelInfo)
 			}
 
-			readingLevel = true
+			isReadingLevel = true
 			curLevelInfo = levelInfo{name: e.Name, startIndex: i}
 			continue
 		}
 
-		if !isLevel(e.Name) && !slices.Contains(levelLumps, e.Name) && readingLevel {
+		if !isLevel(e.Name) && !isLevelLump(e.Name) && isReadingLevel {
 			curLevelInfo.endIndex = i
 			levelList = append(levelList, curLevelInfo)
-			readingLevel = false
+			isReadingLevel = false
 			continue
 		}
 	}
@@ -88,4 +86,10 @@ func isLevel(name string) bool {
 		return true
 	}
 	return false
+}
+
+func isLevelLump(name string) bool {
+	var levelLumps = []string{"THINGS", "LINEDEFS", "SIDEDEFS", "VERTEXES", "SEGS", "SSECTORS", "NODES", "SECTORS", "REJECT", "BLOCKMAP"}
+
+	return slices.Contains(levelLumps, name)
 }
