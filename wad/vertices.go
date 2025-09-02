@@ -2,10 +2,6 @@ package wad
 
 import "fmt"
 
-type Vertices struct {
-	Vertices []Vertex
-}
-
 type Vertex struct {
 	X int16
 	Y int16
@@ -27,10 +23,10 @@ func NewVertexFromBytes(buf []byte) (Vertex, error) {
 	return v, nil
 }
 
-func NewVerticesFromBytes(buf []byte, numEntries int32) (Vertices, error) {
+func NewVerticesFromBytes(buf []byte, numEntries int32) ([]Vertex, error) {
 	var vertexSize int32 = 4
 	if (int32)(len(buf)) != numEntries*vertexSize {
-		return Vertices{}, fmt.Errorf("invalid buffer length; expected %d, got %d", numEntries*vertexSize, len(buf))
+		return nil, fmt.Errorf("invalid buffer length; expected %d, got %d", numEntries*vertexSize, len(buf))
 	}
 	var vertices []Vertex
 
@@ -39,11 +35,11 @@ func NewVerticesFromBytes(buf []byte, numEntries int32) (Vertices, error) {
 		end := start + vertexSize
 		vertex, err := NewVertexFromBytes(buf[start:end])
 		if err != nil {
-			return Vertices{}, fmt.Errorf("error creating vertices: %v", err)
+			return nil, fmt.Errorf("error creating vertices: %v", err)
 		}
 		vertices = append(vertices, vertex)
 
 	}
-	return Vertices{Vertices: vertices}, nil
+	return vertices, nil
 
 }

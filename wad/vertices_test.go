@@ -65,10 +65,9 @@ func TestNewVerticesFromBytes(t *testing.T) {
 		if err != nil {
 			t.Fatalf("could not read vertices: %v", err)
 		}
-		for i := range numVertices {
-			if !reflect.DeepEqual(got.Vertices[i], want[i]) {
-				t.Errorf("wanted %v, got %v", want[i], got.Vertices[i])
-			}
+
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("wanted %v, got %v", want, got)
 		}
 
 	})
