@@ -29,7 +29,6 @@ type Linedef struct {
 }
 
 func (l Linedef) HasFlag(mask int16) bool {
-	fmt.Printf("DEBUG: mask %d, flags %d\n", mask, l.Flags)
 	if mask == LD_IMPASSABLE {
 		return l.Flags == LD_IMPASSABLE
 	}

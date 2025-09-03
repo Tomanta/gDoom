@@ -7,7 +7,7 @@ import (
 
 type Wad struct {
 	Header    Header
-	Directory Directory
+	Directory []DirEntry
 	// Levels    []Level
 }
 
@@ -22,7 +22,7 @@ func NewWadFromBytes(buf []byte) (Wad, error) {
 	dirStart := header.DirectoryPos
 	numLumps := header.NumLumps
 	endPos := dirStart + (numLumps * 16)
-	dir, err := NewDirectoryFromBytes(buf[dirStart:endPos], numLumps)
+	directory, err := NewDirectoryFromBytes(buf[dirStart:endPos], numLumps)
 	if err != nil {
 		return Wad{}, err
 	}
@@ -38,7 +38,7 @@ func NewWadFromBytes(buf []byte) (Wad, error) {
 	curLevelInfo := levelInfo{}
 
 	// now that we have that, we can start loading level data
-	for i, e := range dir.Entries {
+	for i, e := range directory {
 		if isLevelLump(e.Name) {
 			if !isReadingLevel {
 				return Wad{}, fmt.Errorf("error reading wad, lump %s outside level definition", e.Name)
@@ -72,7 +72,7 @@ func NewWadFromBytes(buf []byte) (Wad, error) {
 
 	w := Wad{
 		Header:    header,
-		Directory: dir,
+		Directory: directory,
 	}
 
 	return w, nil

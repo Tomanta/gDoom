@@ -21,6 +21,6 @@ func main() {
 	}
 
 	fmt.Printf("DEBUG: Number of lumps: %d\n", wad.Header.NumLumps)
-	fmt.Printf("DEBUG: Number of directory entries: %d\n", len(wad.Directory.Entries))
+	fmt.Printf("DEBUG: Number of directory entries: %d\n", len(wad.Directory))
 
 }
