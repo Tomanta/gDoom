@@ -50,3 +50,29 @@ func TestNewLinedefFromBytes(t *testing.T) {
 		}
 	})
 }
+
+func TestLinedefHasFlag(t *testing.T) {
+	cases := []struct {
+		name  string
+		data  []byte
+		flags int16
+		want  bool
+	}{
+		{"returns true for impassable if 0", []byte{0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF}, LD_IMPASSABLE, true},
+		{"returns false for impassable if 1", []byte{0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF}, LD_IMPASSABLE, false},
+		{"returns true for block_monsters if 1", []byte{0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF}, LD_BLOCK_MONSTERS, true},
+		{"returns false for block_monsters if 4", []byte{0x00, 0x00, 0x01, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF}, LD_BLOCK_MONSTERS, false},
+	}
+	for _, tt := range cases {
+		t.Run(tt.name, func(t *testing.T) {
+			ld, err := NewLinedefFromBytes(tt.data)
+			if err != nil {
+				t.Fatalf("could not create linedef: %v", err)
+			}
+			got := ld.HasFlag(tt.flags)
+			if got != tt.want {
+				t.Errorf("want %t, got %t", tt.want, got)
+			}
+		})
+	}
+}

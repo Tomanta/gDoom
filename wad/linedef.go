@@ -5,8 +5,9 @@ import (
 	"fmt"
 )
 
+const LD_IMPASSABLE int16 = 0
+
 const (
-	LD_IMPASSIBLE     int16 = 0
 	LD_BLOCK_MONSTERS int16 = 1 << iota
 	LD_TWO_SIDED
 	LD_UPPER_UNPEGGED
@@ -25,6 +26,15 @@ type Linedef struct {
 	TagID          int16
 	RightSidedefID int16
 	LeftSidedefID  int16
+}
+
+func (l Linedef) HasFlag(mask int16) bool {
+	fmt.Printf("DEBUG: mask %d, flags %d\n", mask, l.Flags)
+	if mask == LD_IMPASSABLE {
+		return l.Flags == LD_IMPASSABLE
+	}
+
+	return (l.Flags & mask) == mask
 }
 
 func NewLinedefFromBytes(buf []byte) (Linedef, error) {
