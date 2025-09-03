@@ -36,14 +36,32 @@ func (l Linedef) HasFlag(mask int16) bool {
 	return (l.Flags & mask) == mask
 }
 
-func NewLinedefFromBytes(buf []byte) (Linedef, error) {
-	if len(buf) != 14 {
-		return Linedef{}, fmt.Errorf("invalid linedef entry size; expected 14, received %d", len(buf))
-	}
+func readLinedefFromBuffer(buf []byte) (Linedef, error) {
 	var ld Linedef
 	_, err := binary.Decode(buf, binary.LittleEndian, &ld)
 	if err != nil {
 		return Linedef{}, fmt.Errorf("error decoding linedef: %v", err)
 	}
 	return ld, nil
+}
+
+func NewLinedefsFromBytes(buf []byte, numLinedefs int32) ([]Linedef, error) {
+	var linedefSize int32 = 14
+	if (int32)(len(buf)) != numLinedefs*linedefSize {
+		return []Linedef{}, fmt.Errorf("invalid buffer length; expected %d, got %d", numLinedefs*linedefSize, len(buf))
+	}
+
+	var linedefs []Linedef
+
+	for i := range numLinedefs {
+		start := i * linedefSize
+		end := start + linedefSize
+		linedef, err := readLinedefFromBuffer(buf[start:end])
+		if err != nil {
+			return nil, fmt.Errorf("error creating vertices: %v", err)
+		}
+		linedefs = append(linedefs, linedef)
+
+	}
+	return linedefs, nil
 }

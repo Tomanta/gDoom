@@ -10,11 +10,7 @@ type Vertex struct {
 	Y int16
 }
 
-func NewVertexFromBytes(buf []byte) (Vertex, error) {
-	if len(buf) != 4 {
-		return Vertex{}, fmt.Errorf("buffer wrong length; expected 4 bytes, received %d", len(buf))
-	}
-
+func readVertexFromBuffer(buf []byte) (Vertex, error) {
 	var v Vertex
 	_, err := binary.Decode(buf, binary.LittleEndian, &v)
 	if err != nil {
@@ -34,7 +30,7 @@ func NewVerticesFromBytes(buf []byte, numEntries int32) ([]Vertex, error) {
 	for i := range numEntries {
 		start := i * vertexSize
 		end := start + vertexSize
-		vertex, err := NewVertexFromBytes(buf[start:end])
+		vertex, err := readVertexFromBuffer(buf[start:end])
 		if err != nil {
 			return nil, fmt.Errorf("error creating vertices: %v", err)
 		}

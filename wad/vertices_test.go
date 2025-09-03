@@ -5,38 +5,6 @@ import (
 	"testing"
 )
 
-func TestNewVertexFromBytes(t *testing.T) {
-	t.Run("returns error if buffer wrong length", func(t *testing.T) {
-		data := []byte{
-			0x0c,
-		}
-		_, err := NewVertexFromBytes(data)
-		if err == nil {
-			t.Fatalf("did not receive expected error")
-		}
-
-	})
-	t.Run("returns correct information", func(t *testing.T) {
-		data := []byte{
-			0x04, 0x17, // 5892
-			0xb4, 0xb1, // 	-20044
-		}
-		got, err := NewVertexFromBytes(data)
-		if err != nil {
-			t.Fatalf("unexpected error: %v", err)
-		}
-		var wantX int16 = 5892
-		var wantY int16 = -20044
-
-		if got.X != wantX {
-			t.Errorf("want offset %d, got %d", wantX, got.X)
-		}
-		if got.Y != wantY {
-			t.Errorf("want size %d, got %d", wantY, got.Y)
-		}
-	})
-}
-
 func TestNewVerticesFromBytes(t *testing.T) {
 	t.Run("returns error if buffer wrong length", func(t *testing.T) {
 		data := []byte{
