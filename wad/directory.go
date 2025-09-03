@@ -8,9 +8,7 @@ type DirEntry struct {
 	Name   string
 }
 
-// NewDirEntryFromBytes takes a []byte buffer of 16 characters and returns a new DirEntry.
-// if the buffer is not exactly 16 bytes, returns an error.
-func NewDirEntryFromBytes(buf []byte) (DirEntry, error) {
+func readDirEntryFromBuffer(buf []byte) (DirEntry, error) {
 	if len(buf) != 16 {
 		return DirEntry{}, fmt.Errorf("invalid directory entry size; expected 16, received %d", len(buf))
 	}
@@ -52,7 +50,7 @@ func NewDirectoryFromBytes(buf []byte, numEntries int32) ([]DirEntry, error) {
 	for i := range numEntries {
 		start := i * entrySize
 		end := start + entrySize
-		entry, err := NewDirEntryFromBytes(buf[start:end])
+		entry, err := readDirEntryFromBuffer(buf[start:end])
 		if err != nil {
 			return []DirEntry{}, fmt.Errorf("error creating directory: %v", err)
 		}
