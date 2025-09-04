@@ -2,13 +2,12 @@ package wad
 
 import (
 	"fmt"
-	"slices"
 )
 
 type Wad struct {
 	Header    Header
 	Directory []DirEntry
-	// Levels    []Level
+	Levels    []Level
 }
 
 func NewWadFromBytes(buf []byte) (Wad, error) {
@@ -66,30 +65,17 @@ func NewWadFromBytes(buf []byte) (Wad, error) {
 	}
 
 	// Loop through level list to load all the levels
+	levels := []Level{}
 	for _, l := range levelList {
-		fmt.Printf("Level: %v\n", l)
+		levelData, _ := NewLevelFromBuffer(buf, directory[l.startIndex:l.endIndex])
+		levels = append(levels, levelData)
 	}
 
 	w := Wad{
 		Header:    header,
 		Directory: directory,
+		Levels:    levels,
 	}
 
 	return w, nil
-}
-
-func isLevel(name string) bool {
-	if len(name) == 4 && name[0] == 'E' && name[2] == 'M' {
-		return true
-	}
-	if len(name) == 5 && name[0:3] == "MAP" {
-		return true
-	}
-	return false
-}
-
-func isLevelLump(name string) bool {
-	var levelLumps = []string{"THINGS", "LINEDEFS", "SIDEDEFS", "VERTEXES", "SEGS", "SSECTORS", "NODES", "SECTORS", "REJECT", "BLOCKMAP"}
-
-	return slices.Contains(levelLumps, name)
 }

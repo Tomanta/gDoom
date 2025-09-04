@@ -9,9 +9,6 @@ type DirEntry struct {
 }
 
 func readDirEntryFromBuffer(buf []byte) (DirEntry, error) {
-	if len(buf) != 16 {
-		return DirEntry{}, fmt.Errorf("invalid directory entry size; expected 16, received %d", len(buf))
-	}
 	offset, err := Int32FromBytes(buf[0:4])
 	if err != nil {
 		return DirEntry{}, fmt.Errorf("error reading buffer for lump offset: %v", err)
@@ -30,10 +27,6 @@ func readDirEntryFromBuffer(buf []byte) (DirEntry, error) {
 		Name:   name,
 	}
 	return de, nil
-}
-
-type Directory struct {
-	Entries []DirEntry
 }
 
 // NewDirectoryFromBytes takes a buffer containing the entire directory and a number of
