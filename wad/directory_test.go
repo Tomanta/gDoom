@@ -24,13 +24,14 @@ func TestNewDirectoryFromBytes(t *testing.T) {
 			0x00, 0x2a, 0x00, 0x00, // lump size: 10752
 			0x50, 0x4c, 0x41, 0x59, 0x50, 0x41, 0x4c, 0x00, // name: PLAYPAL
 		}
-		want := DirEntry{
-			Offset: 12,
-			Size:   10752,
-			Name:   "PLAYPAL",
+		want := []DirEntry{
+			{
+				Offset: 12,
+				Size:   10752,
+				Name:   "PLAYPAL",
+			},
 		}
-		gotDir, _ := NewDirectoryFromBytes(entryBuffer, 1)
-		got := gotDir.Entries[0]
+		got, _ := NewDirectoryFromBytes(entryBuffer, 1)
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("wanted %v, got %v", want, got)
 		}
@@ -60,10 +61,8 @@ func TestNewDirectoryFromBytes(t *testing.T) {
 		if err != nil {
 			t.Fatalf("error reading directory, %v", err)
 		}
-		for i, entry := range got.Entries {
-			if !reflect.DeepEqual(want[i], entry) {
-				t.Errorf("wanted %v, got %v", want[i], entry)
-			}
+		if !reflect.DeepEqual(want, got) {
+			t.Errorf("wanted %v, got %v", want, got)
 		}
 	})
 }
