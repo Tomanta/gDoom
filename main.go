@@ -28,8 +28,15 @@ func main() {
 	fmt.Printf("DEBUG: Number of lumps: %d\n", wad.Header.NumLumps)
 	fmt.Printf("DEBUG: Number of directory entries: %d\n", len(wad.Directory))
 
-	for _, l := range wad.Levels {
-		fmt.Printf("DEBUG: %s, NumVertices: %d, NumLinedefs: %d, NumSidedefs: %d\n", l.Name, len(l.Vertices), len(l.Linedefs), len(l.Sidedefs))
+	// for _, l := range wad.Levels {
+	// 	fmt.Printf("DEBUG: %s, NumVertices: %d, NumLinedefs: %d, NumSidedefs: %d\n", l.Name, len(l.Vertices), len(l.Linedefs), len(l.Sidedefs))
+	// }
+
+	for _, d := range wad.Directory {
+		if d.Name == "SIDEDEFS" {
+			fmt.Printf("DEBUG: SD at position %d\n", d.Offset)
+			break
+		}
 	}
 
 	// drawE1M1(wad.Levels[0])
