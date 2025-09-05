@@ -29,10 +29,10 @@ func main() {
 	fmt.Printf("DEBUG: Number of directory entries: %d\n", len(wad.Directory))
 
 	for _, l := range wad.Levels {
-		fmt.Printf("DEBUG: %s, NumVertices: %d, NumLinedefs: %d\n", l.Name, len(l.Vertices), len(l.Linedefs))
+		fmt.Printf("DEBUG: %s, NumVertices: %d, NumLinedefs: %d, NumSidedefs: %d\n", l.Name, len(l.Vertices), len(l.Linedefs), len(l.Sidedefs))
 	}
 
-	drawE1M1(wad.Levels[0])
+	// drawE1M1(wad.Levels[0])
 }
 
 func drawE1M1(l wad.Level) {
