@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"image"
+	"image/color"
 	"os"
 
 	"github.com/tomanta/gdoom/wad"
@@ -28,10 +29,6 @@ func main() {
 	fmt.Printf("DEBUG: Number of lumps: %d\n", wad.Header.NumLumps)
 	fmt.Printf("DEBUG: Number of directory entries: %d\n", len(wad.Directory))
 
-	for _, l := range wad.Levels {
-		fmt.Printf("DEBUG: %s, NumVertices: %d, NumLinedefs: %d\n", l.Name, len(l.Vertices), len(l.Linedefs))
-	}
-
 	drawE1M1(wad.Levels[0])
 }
 
@@ -45,6 +42,7 @@ func drawE1M1(l wad.Level) {
 	type line struct {
 		start_v vtx
 		end_v   vtx
+		color   color.Color
 	}
 	var lines []line
 
@@ -57,7 +55,17 @@ func drawE1M1(l wad.Level) {
 			X: (int32)(l.Vertices[ld.EndVertexID].X) + offx,
 			Y: (int32)(l.Vertices[ld.EndVertexID].Y) + offy,
 		}
-		lines = append(lines, line{start_v: sv, end_v: ev})
+		var c color.RGBA
+		if ld.LeftSidedefID == -1 {
+			c = color.RGBA{R: 255, G: 0, B: 0, A: 255} // Red
+		} else {
+			c = color.RGBA{R: 0, G: 0, B: 0, A: 255} // Black
+		}
+		lines = append(lines, line{
+			start_v: sv,
+			end_v:   ev,
+			color:   c,
+		})
 	}
 
 	var max_x int32 = 0
@@ -86,13 +94,13 @@ func drawE1M1(l wad.Level) {
 	gc.Fill()
 
 	for _, l := range lines {
-		DrawLine(gc, (int)(l.start_v.X), (int)(l.start_v.Y), (int)(l.end_v.X), (int)(l.end_v.Y))
+		DrawLine(gc, l.color, (int)(l.start_v.X), (int)(l.start_v.Y), (int)(l.end_v.X), (int)(l.end_v.Y))
 	}
 	draw2dimg.SaveToPngFile("map.png", dest)
 }
 
-func DrawLine(gc draw2d.GraphicContext, x0, y0, x1, y1 int) {
-
+func DrawLine(gc draw2d.GraphicContext, c color.Color, x0, y0, x1, y1 int) {
+	gc.SetStrokeColor(c)
 	gc.MoveTo((float64)(x0), (float64)(y0))
 	gc.LineTo((float64)(x1), (float64)(y1))
 	gc.Stroke()
