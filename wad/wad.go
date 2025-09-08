@@ -4,6 +4,15 @@ import (
 	"fmt"
 )
 
+// Define the size of lumps with a constant number of bytes
+const (
+	LUMP_SIZE_DIRECTORY_ENTRY = 16
+	LUMP_SIZE_HEADER          = 12
+	LUMP_SIZE_LINEDEF         = 14
+	LUMP_SIZE_SIDEDEF         = 30
+	LUMP_SIZE_VERTEX          = 4
+)
+
 type Wad struct {
 	Header    Header
 	Directory []DirEntry

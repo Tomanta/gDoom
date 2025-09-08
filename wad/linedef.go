@@ -41,16 +41,16 @@ func readLinedefFromBuffer(buf []byte) (Linedef, error) {
 }
 
 func NewLinedefsFromBytes(buf []byte, numLinedefs int32) ([]Linedef, error) {
-	var linedefSize int32 = 14
-	if (int32)(len(buf)) != numLinedefs*linedefSize {
-		return []Linedef{}, fmt.Errorf("invalid buffer length; expected %d, got %d", numLinedefs*linedefSize, len(buf))
+	totalLinedefSize := numLinedefs * LUMP_SIZE_LINEDEF
+	if (int32)(len(buf)) != totalLinedefSize {
+		return []Linedef{}, fmt.Errorf("invalid buffer length; expected %d, got %d", totalLinedefSize, len(buf))
 	}
 
 	var linedefs []Linedef
 
 	for i := range numLinedefs {
-		start := i * linedefSize
-		end := start + linedefSize
+		start := i * LUMP_SIZE_LINEDEF
+		end := start + LUMP_SIZE_LINEDEF
 		linedef, err := readLinedefFromBuffer(buf[start:end])
 		if err != nil {
 			return nil, fmt.Errorf("error creating vertices: %v", err)

@@ -31,16 +31,16 @@ func readDirEntryFromBuffer(buf []byte) (DirEntry, error) {
 // expected entries. It will return a Directory containing each entry in order.
 // If the buffer is not the expect size it will return an error.
 func NewDirectoryFromBytes(buf []byte, numEntries int32) ([]DirEntry, error) {
-	var entrySize int32 = 16
-	if (int32)(len(buf)) != numEntries*entrySize {
-		return []DirEntry{}, fmt.Errorf("expected buffer size %d (%d * 16 bytes), actual size %d", numEntries*entrySize, numEntries, len(buf))
+	totalDirectorySize := numEntries * LUMP_SIZE_DIRECTORY_ENTRY
+	if (int32)(len(buf)) != totalDirectorySize {
+		return []DirEntry{}, fmt.Errorf("expected buffer size %d (%d * 16 bytes), actual size %d", totalDirectorySize, numEntries, len(buf))
 	}
 
 	var directory []DirEntry
 
 	for i := range numEntries {
-		start := i * entrySize
-		end := start + entrySize
+		start := i * LUMP_SIZE_DIRECTORY_ENTRY
+		end := start + LUMP_SIZE_DIRECTORY_ENTRY
 		entry, err := readDirEntryFromBuffer(buf[start:end])
 		if err != nil {
 			return []DirEntry{}, fmt.Errorf("error creating directory: %v", err)
