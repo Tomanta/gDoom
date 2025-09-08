@@ -9,15 +9,15 @@ Very early development. Currently can read the following from a byte buffer (a W
 - [x] header
 - [x] lump directory entry
 - [x] full lump directory
-- [ ] map
-    - [ ] things
-    - [ ] linedefs
-    - [ ] sidedefs
-    - [ ] vertexes
+- [ ] level
+    - [x] things
+    - [x] linedefs
+    - [x] sidedefs
+    - [x] vertexes
     - [ ] segs
     - [ ] ssectors
     - [ ] nodes
-    - [ ] sectors
+    - [x] sectors
     - [ ] rejects
     - [ ] blockmap
 - [ ] playpal
