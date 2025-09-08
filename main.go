@@ -39,7 +39,7 @@ func main() {
 			}
 		}
 	*/
-	//drawE1M1(wad.Levels[0])
+	drawE1M1(wad.Levels[0])
 }
 
 func drawE1M1(l wad.Level) {
@@ -68,8 +68,13 @@ func drawE1M1(l wad.Level) {
 		var c color.RGBA
 		if ld.LeftSidedefID == -1 {
 			c = color.RGBA{R: 255, G: 0, B: 0, A: 255} // Red
+		} else if l.Sectors[l.Sidedefs[ld.LeftSidedefID].SectorID].CeilingHeight != l.Sectors[l.Sidedefs[ld.RightSidedefID].SectorID].CeilingHeight {
+			c = color.RGBA{R: 255, G: 255, B: 0, A: 255} // Yellow
+		} else if l.Sectors[l.Sidedefs[ld.LeftSidedefID].SectorID].FloorHeight != l.Sectors[l.Sidedefs[ld.RightSidedefID].SectorID].FloorHeight {
+			c = color.RGBA{R: 165, G: 42, B: 42, A: 255} // Brown
+
 		} else {
-			c = color.RGBA{R: 0, G: 0, B: 0, A: 255} // Black
+			c = color.RGBA{R: 255, G: 255, B: 255, A: 255} // White
 		}
 		lines = append(lines, line{
 			start_v: sv,
@@ -99,7 +104,7 @@ func drawE1M1(l wad.Level) {
 	dest := image.NewRGBA(image.Rect(0, 0, (int)(max_x), (int)(max_y)))
 	gc := draw2dimg.NewGraphicContext(dest)
 
-	gc.SetFillColor(image.White)
+	gc.SetFillColor(image.Black)
 	draw2dkit.Rectangle(gc, 0, 0, (float64)(max_x), (float64)(max_x))
 	gc.Fill()
 
