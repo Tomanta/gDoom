@@ -29,17 +29,15 @@ func main() {
 	fmt.Printf("DEBUG: Number of lumps: %d\n", wad.Header.NumLumps)
 	fmt.Printf("DEBUG: Number of directory entries: %d\n", len(wad.Directory))
 	/*
-		fmt.Printf("Searcing for sectors...\n")
 		for _, i := range wad.Directory {
-			if i.Name == "SECTORS" {
-				fmt.Printf("Sectors found!\n")
-				fmt.Printf("DEBUG: Sector 1: %s\n", data[i.Offset:i.Offset+26])
-				fmt.Printf("DEBUG: Sector 1: %s\n", data[i.Offset+26:i.Offset+(26*2)])
+			if i.Name == "THINGS" {
+				fmt.Printf("DEBUG: Thing 1: %x\n", data[i.Offset:i.Offset+10])
+				fmt.Printf("DEBUG: Thing 2: %x\n", data[i.Offset+10:i.Offset+(10*2)])
 				break
 			}
 		}
 	*/
-	drawE1M1(wad.Levels[0])
+	// drawE1M1(wad.Levels[0])
 }
 
 func drawE1M1(l wad.Level) {
