@@ -21,15 +21,15 @@ func readVertexFromBuffer(buf []byte) (Vertex, error) {
 }
 
 func NewVerticesFromBytes(buf []byte, numEntries int32) ([]Vertex, error) {
-	var vertexSize int32 = 4
-	if (int32)(len(buf)) != numEntries*vertexSize {
-		return nil, fmt.Errorf("invalid buffer length; expected %d, got %d", numEntries*vertexSize, len(buf))
+	totalVertexSize := numEntries * LUMP_SIZE_VERTEX
+	if (int32)(len(buf)) != totalVertexSize {
+		return nil, fmt.Errorf("invalid buffer length; expected %d, got %d", totalVertexSize, len(buf))
 	}
 	var vertices []Vertex
 
 	for i := range numEntries {
-		start := i * vertexSize
-		end := start + vertexSize
+		start := i * LUMP_SIZE_VERTEX
+		end := start + LUMP_SIZE_VERTEX
 		vertex, err := readVertexFromBuffer(buf[start:end])
 		if err != nil {
 			return nil, fmt.Errorf("error creating vertices: %v", err)

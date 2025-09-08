@@ -14,9 +14,9 @@ type Sidedef struct {
 func readSidedefFromBuffer(buf []byte) (Sidedef, error) {
 	textureOffsetX, _ := Int16FromBytes(buf[0:2])
 	textureOffsetY, _ := Int16FromBytes(buf[2:4])
-	upperTexture, _ := StringFromBytes(buf[4:12], 8)
-	lowerTexture, _ := StringFromBytes(buf[12:20], 8)
-	middleTexture, _ := StringFromBytes(buf[20:28], 8)
+	upperTexture := StringFromBytes(buf[4:12])
+	lowerTexture := StringFromBytes(buf[12:20])
+	middleTexture := StringFromBytes(buf[20:28])
 	sectorID, _ := Int16FromBytes(buf[28:30])
 
 	sd := Sidedef{
@@ -31,19 +31,19 @@ func readSidedefFromBuffer(buf []byte) (Sidedef, error) {
 }
 
 func NewSidedefsFromBytes(buf []byte, numEntries int32) ([]Sidedef, error) {
-	var entrySize int32 = 30
-	if (int32)(len(buf)) != numEntries*entrySize {
-		return []Sidedef{}, fmt.Errorf("expected buffer size %d (%d * 16 bytes), actual size %d", numEntries*entrySize, numEntries, len(buf))
+	totalSidedefSize := numEntries * LUMP_SIZE_SIDEDEF
+	if (int32)(len(buf)) != totalSidedefSize {
+		return []Sidedef{}, fmt.Errorf("expected buffer size %d, actual size %d", totalSidedefSize, len(buf))
 	}
 
 	var sidedefs []Sidedef
 
 	for i := range numEntries {
-		start := i * entrySize
-		end := start + entrySize
+		start := i * LUMP_SIZE_SIDEDEF
+		end := start + LUMP_SIZE_SIDEDEF
 		entry, err := readSidedefFromBuffer(buf[start:end])
 		if err != nil {
-			return []Sidedef{}, fmt.Errorf("error creating directory: %v", err)
+			return []Sidedef{}, fmt.Errorf("error creating sidedefs: %v", err)
 		}
 		sidedefs = append(sidedefs, entry)
 

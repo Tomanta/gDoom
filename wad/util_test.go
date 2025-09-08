@@ -63,14 +63,16 @@ func TestInt32FromBytes(t *testing.T) {
 }
 
 func TestStringFromBytes(t *testing.T) {
-	buf := []byte{0x50, 0x4c, 0x41, 0x59, 0x50, 0x41, 0x4c, 0x00} // PLAYPAL
-	got, _ := StringFromBytes(buf, 8)
-	wantLen := 7
-	want := "PLAYPAL"
-	if len(got) != wantLen {
-		t.Errorf("wanted string of length %d, got %d", wantLen, len(got))
-	}
-	if want != got {
-		t.Errorf("expected string %s, got %s", want, got)
-	}
+	t.Run("returns trimmed string as expected", func(t *testing.T) {
+		buf := []byte{0x50, 0x4c, 0x41, 0x59, 0x50, 0x41, 0x4c, 0x00} // PLAYPAL
+		got := StringFromBytes(buf)
+		wantLen := 7
+		want := "PLAYPAL"
+		if len(got) != wantLen {
+			t.Errorf("wanted string of length %d, got %d", wantLen, len(got))
+		}
+		if want != got {
+			t.Errorf("expected string %s, got %s", want, got)
+		}
+	})
 }

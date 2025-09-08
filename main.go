@@ -28,7 +28,17 @@ func main() {
 
 	fmt.Printf("DEBUG: Number of lumps: %d\n", wad.Header.NumLumps)
 	fmt.Printf("DEBUG: Number of directory entries: %d\n", len(wad.Directory))
-
+	/*
+		fmt.Printf("Searcing for sectors...\n")
+		for _, i := range wad.Directory {
+			if i.Name == "SECTORS" {
+				fmt.Printf("Sectors found!\n")
+				fmt.Printf("DEBUG: Sector 1: %s\n", data[i.Offset:i.Offset+26])
+				fmt.Printf("DEBUG: Sector 1: %s\n", data[i.Offset+26:i.Offset+(26*2)])
+				break
+			}
+		}
+	*/
 	drawE1M1(wad.Levels[0])
 }
 
@@ -58,8 +68,13 @@ func drawE1M1(l wad.Level) {
 		var c color.RGBA
 		if ld.LeftSidedefID == -1 {
 			c = color.RGBA{R: 255, G: 0, B: 0, A: 255} // Red
+		} else if l.Sectors[l.Sidedefs[ld.LeftSidedefID].SectorID].CeilingHeight != l.Sectors[l.Sidedefs[ld.RightSidedefID].SectorID].CeilingHeight {
+			c = color.RGBA{R: 255, G: 255, B: 0, A: 255} // Yellow
+		} else if l.Sectors[l.Sidedefs[ld.LeftSidedefID].SectorID].FloorHeight != l.Sectors[l.Sidedefs[ld.RightSidedefID].SectorID].FloorHeight {
+			c = color.RGBA{R: 165, G: 42, B: 42, A: 255} // Brown
+
 		} else {
-			c = color.RGBA{R: 0, G: 0, B: 0, A: 255} // Black
+			c = color.RGBA{R: 255, G: 255, B: 255, A: 255} // White
 		}
 		lines = append(lines, line{
 			start_v: sv,
@@ -89,7 +104,7 @@ func drawE1M1(l wad.Level) {
 	dest := image.NewRGBA(image.Rect(0, 0, (int)(max_x), (int)(max_y)))
 	gc := draw2dimg.NewGraphicContext(dest)
 
-	gc.SetFillColor(image.White)
+	gc.SetFillColor(image.Black)
 	draw2dkit.Rectangle(gc, 0, 0, (float64)(max_x), (float64)(max_x))
 	gc.Fill()
 

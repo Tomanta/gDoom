@@ -9,6 +9,7 @@ type Level struct {
 	Vertices []Vertex
 	Linedefs []Linedef
 	Sidedefs []Sidedef
+	Sectors  []Sector
 }
 
 func isLevel(name string) bool {
@@ -36,12 +37,14 @@ func NewLevelFromBuffer(buf []byte, directory []DirEntry) (Level, error) {
 			level.Name = de.Name
 
 		case de.Name == "VERTEXES":
-			level.Vertices, _ = NewVerticesFromBytes(data, de.Size/4)
+			level.Vertices, _ = NewVerticesFromBytes(data, de.Size/LUMP_SIZE_VERTEX)
 
 		case de.Name == "LINEDEFS":
-			level.Linedefs, _ = NewLinedefsFromBytes(data, de.Size/14)
+			level.Linedefs, _ = NewLinedefsFromBytes(data, de.Size/LUMP_SIZE_LINEDEF)
 		case de.Name == "SIDEDEFS":
-			level.Sidedefs, _ = NewSidedefsFromBytes(data, de.Size/30)
+			level.Sidedefs, _ = NewSidedefsFromBytes(data, de.Size/LUMP_SIZE_SIDEDEF)
+		case de.Name == "SECTORS":
+			level.Sectors, _ = NewSectorsFromBytes(data, de.Size/LUMP_SIZE_SECTOR)
 		}
 	}
 	return level, nil

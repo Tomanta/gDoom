@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestNewSidedefssFromBytes(t *testing.T) {
+func TestNewSidedefsFromBytes(t *testing.T) {
 	t.Run("returns error if buffer wrong length", func(t *testing.T) {
 		data := []byte{
 			0x00, 0x00,

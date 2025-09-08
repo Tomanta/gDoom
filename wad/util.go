@@ -29,17 +29,14 @@ func Int32FromBytes(buf []byte) (int32, error) {
 // return a string from that slice. It will stop parsing as soon as it hits
 // a null byte (0x00). If the input buffer is not the expected length it will
 // return an error.
-func StringFromBytes(buf []byte, length int) (string, error) {
-	if len(buf) != length {
-		return "", fmt.Errorf("expected buffer size %d, received %d", length, len(buf))
-	}
+func StringFromBytes(buf []byte) string {
 	var newBuf []byte
 	for _, b := range buf {
 		// If we receive a null byte, return the string
 		if b == 0x00 {
-			return string(newBuf), nil
+			return string(newBuf)
 		}
 		newBuf = append(newBuf, b)
 	}
-	return string(newBuf), nil
+	return string(newBuf)
 }
