@@ -37,7 +37,7 @@ func main() {
 			}
 		}
 	*/
-	// drawE1M1(wad.Levels[0])
+	drawE1M1(wad.Levels[0])
 }
 
 func drawE1M1(l wad.Level) {
