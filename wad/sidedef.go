@@ -14,9 +14,9 @@ type Sidedef struct {
 func readSidedefFromBuffer(buf []byte) (Sidedef, error) {
 	textureOffsetX, _ := Int16FromBytes(buf[0:2])
 	textureOffsetY, _ := Int16FromBytes(buf[2:4])
-	upperTexture, _ := StringFromBytes(buf[4:12], 8)
-	lowerTexture, _ := StringFromBytes(buf[12:20], 8)
-	middleTexture, _ := StringFromBytes(buf[20:28], 8)
+	upperTexture := StringFromBytes(buf[4:12])
+	lowerTexture := StringFromBytes(buf[12:20])
+	middleTexture := StringFromBytes(buf[20:28])
 	sectorID, _ := Int16FromBytes(buf[28:30])
 
 	sd := Sidedef{

@@ -17,10 +17,8 @@ func readDirEntryFromBuffer(buf []byte) (DirEntry, error) {
 	if err != nil {
 		return DirEntry{}, fmt.Errorf("error reading buffer for lump size: %v", err)
 	}
-	name, err := StringFromBytes(buf[8:16], 8)
-	if err != nil {
-		return DirEntry{}, fmt.Errorf("error reading buffer for lump name: %v", err)
-	}
+	name := StringFromBytes(buf[8:16])
+
 	de := DirEntry{
 		Offset: offset,
 		Size:   size,

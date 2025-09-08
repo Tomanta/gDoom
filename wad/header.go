@@ -17,10 +17,7 @@ func NewHeaderFromBytes(data []byte) (Header, error) {
 	if len(data) < 12 {
 		return Header{}, fmt.Errorf("file too small: %d", len(data))
 	}
-	wadType, err := StringFromBytes(data[0:4], 4)
-	if err != nil {
-		return Header{}, fmt.Errorf("could not read file type: %v", err)
-	}
+	wadType := StringFromBytes(data[0:4])
 
 	numLumps, err := Int32FromBytes(data[4:8])
 	if err != nil {

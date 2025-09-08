@@ -5,17 +5,16 @@ import (
 	"fmt"
 )
 
-const LD_IMPASSABLE int16 = 0
-
+// Using original naming
 const (
-	LD_BLOCK_MONSTERS int16 = 1 << iota
-	LD_TWO_SIDED
-	LD_UPPER_UNPEGGED
-	LD_LOWER_UNPEGGED
-	LD_SECRET
-	LD_BLOCK_SOUND
-	LD_NOT_ON_MAP
-	LD_ALREADY_ON_MAP
+	ML_BLOCKING int16 = 1 << iota
+	ML_BLOCKMONSTERS
+	ML_TWOSIDED
+	ML_DONTPEGTOP
+	ML_DONTPEGBOTTOM
+	ML_SECRET
+	ML_SOUNDBLOCK
+	ML_MAPPED
 )
 
 type Linedef struct {
@@ -29,10 +28,6 @@ type Linedef struct {
 }
 
 func (l Linedef) HasFlag(mask int16) bool {
-	if mask == LD_IMPASSABLE {
-		return l.Flags == LD_IMPASSABLE
-	}
-
 	return (l.Flags & mask) == mask
 }
 
