@@ -11,6 +11,7 @@ const (
 	LUMP_SIZE_LINEDEF         = 14
 	LUMP_SIZE_SECTOR          = 26
 	LUMP_SIZE_SIDEDEF         = 30
+	LUMP_SIZE_THING           = 10
 	LUMP_SIZE_VERTEX          = 4
 )
 
