@@ -33,7 +33,7 @@ func readSidedefFromBuffer(buf []byte) (Sidedef, error) {
 func NewSidedefsFromBytes(buf []byte, numEntries int32) ([]Sidedef, error) {
 	totalSidedefSize := numEntries * LUMP_SIZE_SIDEDEF
 	if (int32)(len(buf)) != totalSidedefSize {
-		return []Sidedef{}, fmt.Errorf("expected buffer size %d (%d * 16 bytes), actual size %d", totalSidedefSize, numEntries, len(buf))
+		return []Sidedef{}, fmt.Errorf("expected buffer size %d, actual size %d", totalSidedefSize, len(buf))
 	}
 
 	var sidedefs []Sidedef
@@ -43,7 +43,7 @@ func NewSidedefsFromBytes(buf []byte, numEntries int32) ([]Sidedef, error) {
 		end := start + LUMP_SIZE_SIDEDEF
 		entry, err := readSidedefFromBuffer(buf[start:end])
 		if err != nil {
-			return []Sidedef{}, fmt.Errorf("error creating directory: %v", err)
+			return []Sidedef{}, fmt.Errorf("error creating sidedefs: %v", err)
 		}
 		sidedefs = append(sidedefs, entry)
 
