@@ -38,6 +38,15 @@ func main() {
 		}
 	*/
 	drawE1M1(wad.Levels[0])
+	drawPlaypal(wad.Palettes)
+}
+
+// TODO: May need to port in Ebintengine just for drawing capabilities
+func drawPlaypal(p [14]wad.Palette) {
+	for i := range 5 {
+		r, g, b, _ := p[0].Colors[i].RGBA()
+		fmt.Printf("Color: {%d, %d, %d}\n", r, g, b)
+	}
 }
 
 func drawE1M1(l wad.Level) {
