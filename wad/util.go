@@ -5,6 +5,13 @@ import (
 	"fmt"
 )
 
+func Uint8FromByte(buf byte) uint8 {
+	var value uint8
+	b := []byte{buf}
+	binary.Decode(b, binary.LittleEndian, &value)
+	return value
+}
+
 // Int16FromBytes takes a slice of 2 bytes in Little Endian encoding and return
 // an Int16. LittleEndian is the expected encoding for Doom source files.
 // If the provided slice is not exactly 4 bytes it will return an error.

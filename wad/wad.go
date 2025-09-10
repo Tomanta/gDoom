@@ -13,10 +13,14 @@ const (
 	LUMP_SIZE_SIDEDEF         = 30
 	LUMP_SIZE_THING           = 10
 	LUMP_SIZE_VERTEX          = 4
+	LUMP_SIZE_COLOR           = 3
+	LUMP_SIZE_PALETTE         = 256 * 3
+	LUMP_NUM_PALETTES         = 14
 )
 
 type Wad struct {
 	Header    Header
+	Palettes  [14]Palette
 	Directory []DirEntry
 	Levels    []Level
 }
@@ -27,6 +31,8 @@ func NewWadFromBytes(buf []byte) (Wad, error) {
 	if err != nil {
 		return Wad{}, err
 	}
+
+	var palettes [14]Palette
 
 	// header points us to the lump directory, load that
 	dirStart := header.DirectoryPos
@@ -71,7 +77,11 @@ func NewWadFromBytes(buf []byte) (Wad, error) {
 			curLevelInfo.endIndex = i
 			levelList = append(levelList, curLevelInfo)
 			isReadingLevel = false
-			continue
+		}
+
+		switch e.Name {
+		case "PLAYPAL":
+			palettes, _ = NewPlaypalFromBytes(buf[e.Offset : e.Offset+e.Size])
 		}
 	}
 
@@ -86,6 +96,7 @@ func NewWadFromBytes(buf []byte) (Wad, error) {
 		Header:    header,
 		Directory: directory,
 		Levels:    levels,
+		Palettes:  palettes,
 	}
 
 	return w, nil
