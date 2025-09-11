@@ -8,10 +8,43 @@ import (
 
 	"github.com/tomanta/gdoom/wad"
 
+	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/vector"
+
 	"github.com/llgcode/draw2d"
 	"github.com/llgcode/draw2d/draw2dimg"
 	"github.com/llgcode/draw2d/draw2dkit"
 )
+
+type Game struct {
+	Palettes [14]wad.Palette
+}
+
+func (g *Game) Update() error {
+	return nil
+}
+
+func (g *Game) Draw(screen *ebiten.Image) {
+	g.DrawDebugPalette(screen, 0)
+}
+
+func (g *Game) DrawDebugPalette(screen *ebiten.Image, palNum int) {
+	squareSize := 30
+	for i := range 16 {
+		xPos := (float32)(-1 + i*squareSize)
+
+		for j := range 16 {
+			c := g.Palettes[palNum].Colors[j+(i*16)]
+			yPos := (float32)(-1 + j*squareSize)
+			vector.DrawFilledRect(screen, xPos, yPos, (float32)(squareSize), (float32)(squareSize), c, false)
+
+		}
+	}
+}
+
+func (g *Game) Layout(outsideWidth, insideWidth int) (int, int) {
+	return 480, 480
+}
 
 func main() {
 	testFile := "./gamefiles/doom1.wad"
@@ -43,9 +76,12 @@ func main() {
 
 // TODO: May need to port in Ebintengine just for drawing capabilities
 func drawPlaypal(p [14]wad.Palette) {
-	for i := range 5 {
-		r, g, b, _ := p[0].Colors[i].RGBA()
-		fmt.Printf("Color: {%d, %d, %d}\n", r, g, b)
+	g := Game{Palettes: p}
+	ebiten.SetWindowSize(480, 480)
+	ebiten.SetWindowTitle("Test")
+	if err := ebiten.RunGame(&g); err != nil {
+
+		panic(err)
 	}
 }
 
