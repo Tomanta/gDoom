@@ -17,7 +17,7 @@ import (
 )
 
 type Game struct {
-	P [14]wad.Palette
+	Palettes [14]wad.Palette
 }
 
 func (g *Game) Update() error {
@@ -25,9 +25,21 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	clr := g.P[0].Colors[30]
-	screen.Fill(color.White)
-	vector.DrawFilledRect(screen, 0, 0, 40, 40, clr, false)
+	g.DrawDebugPalette(screen, 0)
+}
+
+func (g *Game) DrawDebugPalette(screen *ebiten.Image, palNum int) {
+	squareSize := 30
+	for i := range 16 {
+		xPos := (float32)(-1 + i*squareSize)
+
+		for j := range 16 {
+			c := g.Palettes[palNum].Colors[j+(i*16)]
+			yPos := (float32)(-1 + j*squareSize)
+			vector.DrawFilledRect(screen, xPos, yPos, (float32)(squareSize), (float32)(squareSize), c, false)
+
+		}
+	}
 }
 
 func (g *Game) Layout(outsideWidth, insideWidth int) (int, int) {
@@ -64,30 +76,13 @@ func main() {
 
 // TODO: May need to port in Ebintengine just for drawing capabilities
 func drawPlaypal(p [14]wad.Palette) {
-	g := Game{P: p}
+	g := Game{Palettes: p}
 	ebiten.SetWindowSize(480, 480)
 	ebiten.SetWindowTitle("Test")
 	if err := ebiten.RunGame(&g); err != nil {
 
 		panic(err)
 	}
-
-	/*
-	   f, err := os.Create("palette.png")
-
-	   	if err != nil {
-	   		panic(err)
-	   	}
-
-	   	if err := png.Encode(f, whiteImage); err != nil {
-	   		f.Close()
-	   		panic(err)
-	   	}
-
-	   	if err := f.Close(); err != nil {
-	   		panic(err)
-	   	}
-	*/
 }
 
 func drawE1M1(l wad.Level) {
