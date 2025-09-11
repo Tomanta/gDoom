@@ -19,7 +19,7 @@ jobs:
           go-version: "1.24.6"
 
       - name: install gcc
-        run: apt install gcc
+        run: sudo apt install gcc
 
       - name: install dependencies
         run: sudo apt install libc6-dev libgl1-mesa-dev libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev libxxf86vm-dev libasound2-dev pkg-config
